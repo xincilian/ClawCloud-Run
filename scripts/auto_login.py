@@ -593,29 +593,869 @@ class AutoLogin:
             page.wait_for_load_state('networkidle', timeout=30000)
     
     def wait_redirect(self, page, wait=60):
-        """等待重定向并检测区域"""
-        self.log("等待重定向...", "STEP")
-        for i in range(wait):
-            url = page.url
-            
-            # 检查是否已跳转到 claw.cloud
-            if 'claw.cloud' in url and 'signin' not in url.lower():
-                self.log("重定向成功！", "SUCCESS")
-                
-                # 检测并记录区域
-                self.detect_region(url)
-                
-                return True
-            
-            if 'github.com/login/oauth/authorize' in url:
-                self.oauth(page)
-            
-            time.sleep(1)
-            if i % 10 == 0:
-                self.log(f"  等待... ({i}秒)")
-        
-        self.log("重定向超时", "ERROR")
-        return False
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
+    def wait_redirect(self, page, wait=60):
+    """等待 OAuth 完成，不强依赖 URL 变化"""
+    self.log("等待 OAuth 完成...", "STEP")
+
+    for i in range(wait):
+        url = page.url
+
+        # 如果已经在 ClawCloud 域名（不论路径）
+        if 'claw.cloud' in url and 'signin' not in url.lower():
+            self.log("已在 ClawCloud，登录成功", "SUCCESS")
+            self.detect_region(url)
+            return True
+
+        # GitHub OAuth 页面，尝试授权
+        if 'github.com/login/oauth/authorize' in url:
+            self.oauth(page)
+
+        # ⭐ 关键：每 10 秒主动探测一次 ClawCloud
+        if i % 10 == 0:
+            try:
+                page.goto(LOGIN_ENTRY_URL, timeout=30000)
+                page.wait_for_load_state('networkidle', timeout=15000)
+                if 'signin' not in page.url.lower():
+                    self.log("主动验证成功（Cookie 已生效）", "SUCCESS")
+                    self.detect_region(page.url)
+                    return True
+            except:
+                pass
+
+            self.log(f"  等待... ({i}秒)")
+
+        time.sleep(1)
+
+    self.log("OAuth 完成但未检测到成功状态", "ERROR")
+    return False
+
     
     def keepalive(self, page):
         """保活 - 使用检测到的区域 URL"""
